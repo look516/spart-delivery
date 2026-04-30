@@ -3,7 +3,9 @@ name: CD - Deploy to AWS EC2
 on:
   push:
     branches:
-      - prod # main 에 할 수 없으므로 지금은 prod로 합니다.
+      - test/action
+      # 테스트용 임시 설정
+      # main 에 할 수 없으므로 지금은 prod로 합니다.
       # main 이라면 workflows -> types -> branches 로 정의해야 합니다.
 
 
@@ -69,7 +71,7 @@ jobs:
             docker pull ${{ steps.login-ecr.outputs.registry }}/spring-boot-app:latest
             docker run -d --name spring-app \
               -p 80:8080 \
-              -e SPRING_PROFILES_ACTIVE=prod \
+              -e SPRING_PROFILES_ACTIVE=test/action \ #테스트용 임시 설정
               -e SPRING_DATASOURCE_URL=${{ secrets.RDS_HOSTURL }} \
               -e SPRING_DATASOURCE_USERNAME=${{secrets.RDS_USERNAME }} \
               -e SPRING_DATASOURCE_PASSWORD=${{ secrets.RDS_PASSWORD }} \
