@@ -1,7 +1,9 @@
 package com.sparta.spartadelivery.menu.presentation.controller;
 
+import com.sparta.spartadelivery.global.annotation.CheckMenuPermission;
 import com.sparta.spartadelivery.global.infrastructure.config.security.UserPrincipal;
 import com.sparta.spartadelivery.global.presentation.dto.ApiResponse;
+import com.sparta.spartadelivery.menu.application.service.MenuAction;
 import com.sparta.spartadelivery.menu.application.service.MenuService;
 import com.sparta.spartadelivery.menu.presentation.dto.request.MenuCreateRequest;
 import com.sparta.spartadelivery.menu.presentation.dto.request.MenuUpdateRequest;
@@ -125,6 +127,26 @@ public class MenuController {
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.success(HttpStatus.OK.value(), "메뉴가 성공적으로 삭제되었습니다.", null));
+    }
+
+    @Operation(
+            summary = "메뉴 숨김 API",
+            description = """
+                    메뉴를 숨김 처리합니다.
+                    - CUSTOMER: 수정 불가
+                    - OWNER: 본인 가게 메뉴만 숨김 가능
+                    - MANAGER/MASTER: 모든 메뉴 숨김 가능
+                    """
+    )
+    @PatchMapping("/menus/{menuId}/hide")
+    @CheckMenuPermission(action = MenuAction.HIDE) // AOP 가동
+    public ResponseEntity<ApiResponse<MenuDetailResponse>> hideMenu(
+            @PathVariable UUID menuId,
+            @AuthenticationPrincipal UserPrincipal userPrincipal
+    ) {
+        MenuDetailResponse response = menuService.hideMenu(menuId, userPrincipal);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.success(HttpStatus.OK.value(), "메뉴가 성공적으로 숨겨졌습니다.", response));
     }
 
     @Operation(

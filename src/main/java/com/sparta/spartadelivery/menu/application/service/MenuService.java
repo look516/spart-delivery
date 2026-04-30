@@ -98,7 +98,6 @@ public class MenuService {
         // 2. 가게 조회 및 상태 확인
         Store store = getStore(menu.getStoreId());
 
-
         // 3. 관리 권한 통합 검증 (가게 상태 + 유저 권한 체크)
         menuManagePermissionPolicy.validateManagePermission(requester, store);
 
@@ -107,6 +106,31 @@ public class MenuService {
 
         // 5. soft delete (or email 이용)
         menu.markDeleted(requester.getUsername());
+    }
+
+    /**
+     * 메뉴 숨김
+     */
+    @Transactional
+    public MenuDetailResponse hideMenu(UUID menuId, UserPrincipal requester) {
+        // Aspect에서 존재 여부를 확인했지만, 영속성 컨텍스트 활용을 위해 한 번 더 조회하거나
+        // Aspect에서 조회한 객체를 넘겨받는 설계를 사용할 수 있습니다.
+        Menu menu = menuRepository.findById(menuId)
+                .orElseThrow(() -> new AppException(MenuErrorCode.MENU_NOT_FOUND));
+
+        // 2. 가게 조회
+        Store store = getStore(menu.getStoreId());
+
+        // 3. 권한 검증 (사장님 본인인지 + 가게 상태 등)
+        menuManagePermissionPolicy.validateManagePermission(requester, store);
+
+        // 4. 숨김 가능 상태인지 검증
+        menuManagePermissionPolicy.validateHideCondition(menu);
+
+        // 5. 상태 변경
+        menu.hide();
+
+        return MenuDetailResponse.from(menu);
     }
 
     @Transactional

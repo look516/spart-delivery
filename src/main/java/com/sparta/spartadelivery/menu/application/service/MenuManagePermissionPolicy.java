@@ -54,6 +54,15 @@ public class MenuManagePermissionPolicy {
         }
     }
 
+    /**
+     * 숨김 전용 추가 검증 (이미 숨겨진 경우 등)
+     */
+    public void validateHideCondition(Menu menu) {
+        if (menu.isHidden()) {
+            throw new AppException(MenuErrorCode.MENU_ALREADY_HIDDEN);
+        }
+    }
+
     public void validateUpdateCondition(UserPrincipal editor, Menu menu) {
         if (menu.isDeleted()) {
             throw new AppException(MenuErrorCode.MENU_UPDATE_ACCESS_DENIED);
