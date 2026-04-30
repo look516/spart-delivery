@@ -4,21 +4,13 @@ import com.sparta.spartadelivery.area.domain.entity.Area;
 import com.sparta.spartadelivery.global.entity.BaseEntity;
 import com.sparta.spartadelivery.storecategory.domain.entity.StoreCategory;
 import com.sparta.spartadelivery.user.domain.entity.UserEntity;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
-import java.math.BigDecimal;
-import java.util.UUID;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.UUID;
 
 @Entity
 @Getter
@@ -52,8 +44,14 @@ public class Store extends BaseEntity {
     @Column(name = "phone", length = 20)
     private String phone;
 
-    @Column(name = "average_rating", precision = 2, scale = 1, nullable = false)
-    private BigDecimal averageRating = BigDecimal.ZERO;
+//    @Column(name = "average_rating", precision = 2, scale = 1, nullable = false)
+//    private BigDecimal averageRating = BigDecimal.ZERO;
+
+    @Column(name = "rating_sum")
+    private int ratingSum;
+
+    @Column(name = "rating_count")
+    private int ratingCount;
 
     @Column(name = "is_hidden", nullable = false)
     private boolean isHidden = false;
@@ -83,9 +81,9 @@ public class Store extends BaseEntity {
         this.phone = phone;
     }
 
-    public void updateAverageRating(BigDecimal averageRating) {
-        this.averageRating = averageRating;
-    }
+//    public void updateAverageRating(BigDecimal averageRating) {
+//        this.averageRating = averageRating;
+//    }
 
     public void hide() {
         this.isHidden = true;

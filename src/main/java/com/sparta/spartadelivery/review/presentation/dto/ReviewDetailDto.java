@@ -2,6 +2,7 @@ package com.sparta.spartadelivery.review.presentation.dto;
 
 import com.sparta.spartadelivery.review.domain.entity.Review;
 import io.swagger.v3.oas.annotations.media.Schema;
+import org.springframework.data.domain.Slice;
 
 import java.util.UUID;
 
@@ -26,5 +27,9 @@ public record ReviewDetailDto(
                 review.getContent()
 
         );
+    }
+
+    public static Slice<ReviewDetailDto> from(Slice<Review> reviewSlice) {
+        return reviewSlice.map(ReviewDetailDto::from);
     }
 }

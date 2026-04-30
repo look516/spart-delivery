@@ -2,7 +2,9 @@ package com.sparta.spartadelivery.store.presentation.dto.response;
 
 import com.sparta.spartadelivery.store.domain.entity.Store;
 import io.swagger.v3.oas.annotations.media.Schema;
+
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -47,9 +49,23 @@ public record StoreDetailResponse(
                 store.getName(),
                 store.getAddress(),
                 store.getPhone(),
-                store.getAverageRating(),
+                getAverageRating(store.getRatingSum(), store.getRatingCount()),
                 store.isHidden(),
                 store.getCreatedAt()
         );
+    }
+
+    private static BigDecimal getAverageRating(int ratingSum, int ratingCount) {
+        // 1. 리뷰가 하나도 없는 경우(분모가 0) 처리
+        if (ratingCount == 0) {
+            return BigDecimal.ZERO.setScale(1, RoundingMode.HALF_UP);
+        }
+
+        // 2. NaN이나 Infinity 발생을 방지하기 위해 정수 연산 후 변환하거나,
+        // 값을 double로 만든 후 유효성 체크를 거칩니다.
+        double avg = (double) ratingSum / ratingCount;
+
+        return BigDecimal.valueOf(avg)
+                .setScale(1, RoundingMode.HALF_UP);
     }
 }

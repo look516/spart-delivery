@@ -6,7 +6,9 @@ import com.sparta.spartadelivery.menu.domain.entity.Menu;
 import com.sparta.spartadelivery.menu.domain.repository.MenuRepository;
 import com.sparta.spartadelivery.menu.exception.MenuErrorCode;
 import com.sparta.spartadelivery.menu.presentation.dto.request.MenuCreateRequest;
+import com.sparta.spartadelivery.menu.presentation.dto.request.MenuUpdateRequest;
 import com.sparta.spartadelivery.menu.presentation.dto.response.MenuDetailResponse;
+import com.sparta.spartadelivery.menu.presentation.dto.response.MenuUpdateResponse;
 import com.sparta.spartadelivery.store.domain.entity.Store;
 import com.sparta.spartadelivery.store.domain.repository.StoreRepository;
 import com.sparta.spartadelivery.store.exception.StoreErrorCode;
@@ -14,6 +16,8 @@ import com.sparta.spartadelivery.user.domain.entity.Role;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -122,10 +126,10 @@ class MenuServiceTest {
 
         when(menuRepository.save(any(Menu.class)))
                 .thenAnswer(invocation -> {
-            Menu menu = invocation.getArgument(0);
-            ReflectionTestUtils.setField(menu, "id", UUID.randomUUID());
-            return menu;
-        });
+                    Menu menu = invocation.getArgument(0);
+                    ReflectionTestUtils.setField(menu, "id", UUID.randomUUID());
+                    return menu;
+                });
 
         // when
         MenuDetailResponse response = menuService.createMenu(storeId, request, requester);
@@ -134,6 +138,92 @@ class MenuServiceTest {
         assertThat(response).isNotNull();
         verify(menuRepository).save(any(Menu.class));
         verify(menuManagePermissionPolicy).validateManagePermission(eq(requester), eq(store));
+    }
+
+    @Test
+    @DisplayName("가게 수정 실패 - 소유자(Owner)가 아닌 사용자가 수정을 시도할 경우")
+    void updateStore_Fail_NotOwner() {
+        // given
+        UUID menuId = UUID.randomUUID();
+        UUID storeId = UUID.randomUUID();
+
+        // 1. 요청자 설정 (ID 999L인 다른 사장님)
+        UserPrincipal notOwner = principal(999L, Role.OWNER);
+
+        // 2. DTO 생성 (record 생성자 이용)
+        MenuUpdateRequest request = new MenuUpdateRequest(
+                "수정메뉴", 15000, "설명", "url", false, UUID.randomUUID(), "AI설명", "AI프롬프트"
+        );
+
+        // 3. 도메인 객체 Mocking
+        Menu menu = mock(Menu.class);
+        Store store = mock(Store.class);
+
+        // 4. Repository 행위 정의
+        when(menuRepository.findById(menuId)).thenReturn(Optional.of(menu));
+        when(menu.getStoreId()).thenReturn(storeId); // 메뉴가 속한 가게 ID 반환
+        when(storeRepository.findById(storeId)).thenReturn(Optional.of(store));
+
+        // 5. Policy에서 소유권 검증 실패(AppException)를 던지도록 설정
+        // 서비스 로직에서 가장 먼저 호출되는 validateManagePermission을 타겟팅
+        doThrow(new AppException(MenuErrorCode.MENU_UPDATE_ACCESS_DENIED))
+                .when(menuManagePermissionPolicy).validateManagePermission(eq(notOwner), any(Store.class));
+
+        // when & then
+        assertThatThrownBy(() -> menuService.update(menuId, notOwner, request))
+                .isInstanceOf(AppException.class)
+                .extracting("errorCode")
+                .isEqualTo(MenuErrorCode.MENU_UPDATE_ACCESS_DENIED);
+
+        // 검증: 예외가 발생했으므로 엔티티의 update 메서드는 절대 호출되지 않아야 함
+        verify(menu, never()).update(any(), any(), any(), any(), any(), anyBoolean(), any(), any());
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Role.class, names = {"OWNER", "MANAGER", "MASTER"})
+    @DisplayName("메뉴 수정 성공 - 권한 검증 통과된 경우")
+    void updateMenu_Success_ByAuthorizedRoles(Role role) {
+        // Given
+        UUID menuId = UUID.randomUUID();
+        UUID storeId = UUID.randomUUID();
+        UUID categoryId = UUID.randomUUID();
+
+        UserPrincipal editor = principal(1L, role);
+
+        MenuUpdateRequest request = new MenuUpdateRequest(
+                "수정된 메뉴", 25000, "설명", "url", false,
+                categoryId, "AI설명", "AI프롬프트"
+        );
+
+        Menu menu = new Menu(
+                storeId, categoryId,
+                "기존이름", 20000, "설명", "url",
+                false, "AI", "Prompt"
+        );
+        ReflectionTestUtils.setField(menu, "id", menuId);
+
+        Store store = mock(Store.class);
+
+        //when
+        when(menuRepository.findById(menuId))
+                .thenReturn(Optional.of(menu));
+
+        when(storeRepository.findById(any()))
+                .thenReturn(Optional.of(store));
+
+        doNothing().when(menuManagePermissionPolicy)
+                .validateManagePermission(any(), any());
+        doNothing().when(menuManagePermissionPolicy)
+                .validateUpdateCondition(any(), any());
+
+        MenuUpdateResponse response =
+                menuService.update(menuId, editor, request);
+
+        //then
+        assertThat(response.name()).isEqualTo("수정된 메뉴");
+        assertThat(response.price()).isEqualTo(25000);
+        verify(menuRepository).findById(menuId);
+        verify(storeRepository).findById(any());
     }
 
     // -----------------------------

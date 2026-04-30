@@ -7,8 +7,10 @@ import com.sparta.spartadelivery.menu.domain.repository.MenuRepository;
 import com.sparta.spartadelivery.menu.domain.vo.MoneyVO;
 import com.sparta.spartadelivery.menu.exception.MenuErrorCode;
 import com.sparta.spartadelivery.menu.presentation.dto.request.MenuCreateRequest;
+import com.sparta.spartadelivery.menu.presentation.dto.request.MenuUpdateRequest;
 import com.sparta.spartadelivery.menu.presentation.dto.response.MenuDetailResponse;
 import com.sparta.spartadelivery.menu.presentation.dto.response.MenuListResponse;
+import com.sparta.spartadelivery.menu.presentation.dto.response.MenuUpdateResponse;
 import com.sparta.spartadelivery.store.domain.entity.Store;
 import com.sparta.spartadelivery.store.domain.repository.StoreRepository;
 import com.sparta.spartadelivery.store.exception.StoreErrorCode;
@@ -107,29 +109,28 @@ public class MenuService {
         menu.markDeleted(requester.getUsername());
     }
 
-    /**
-     * 메뉴 숨김
-     */
     @Transactional
-    public MenuDetailResponse hideMenu(UUID menuId, UserPrincipal requester) {
-        // Aspect에서 존재 여부를 확인했지만, 영속성 컨텍스트 활용을 위해 한 번 더 조회하거나
-        // Aspect에서 조회한 객체를 넘겨받는 설계를 사용할 수 있습니다.
+    public MenuUpdateResponse update(UUID menuId, UserPrincipal editor, MenuUpdateRequest request) {
         Menu menu = menuRepository.findById(menuId)
                 .orElseThrow(() -> new AppException(MenuErrorCode.MENU_NOT_FOUND));
+        Store store = storeRepository.findById(menu.getStoreId())
+                .orElseThrow(() -> new AppException(StoreErrorCode.STORE_NOT_FOUND));
 
-        // 2. 가게 조회
-        Store store = getStore(menu.getStoreId());
+        menuManagePermissionPolicy.validateManagePermission(editor, store);
+        menuManagePermissionPolicy.validateUpdateCondition(editor, menu);
 
-        // 3. 권한 검증 (사장님 본인인지 + 가게 상태 등)
-        menuManagePermissionPolicy.validateManagePermission(requester, store);
+        menu.update(
+                request.menuCategoryId(),
+                request.name(),
+                request.price(),
+                request.description(),
+                request.menuPictureUrl(),
+                request.isHidden(),
+                request.aiDescription(),
+                request.aiPrompt()
+        );
 
-        // 4. 숨김 가능 상태인지 검증
-        menuManagePermissionPolicy.validateHideCondition(menu);
-
-        // 5. 상태 변경
-        menu.hide();
-
-        return MenuDetailResponse.from(menu);
+        return MenuUpdateResponse.from(menu);
     }
 
 

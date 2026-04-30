@@ -1,19 +1,20 @@
 package com.sparta.spartadelivery.menu.presentation.controller;
 
-import com.sparta.spartadelivery.global.annotation.CheckMenuPermission;
 import com.sparta.spartadelivery.global.infrastructure.config.security.UserPrincipal;
 import com.sparta.spartadelivery.global.presentation.dto.ApiResponse;
-import com.sparta.spartadelivery.menu.application.service.MenuAction;
 import com.sparta.spartadelivery.menu.application.service.MenuService;
 import com.sparta.spartadelivery.menu.presentation.dto.request.MenuCreateRequest;
+import com.sparta.spartadelivery.menu.presentation.dto.request.MenuUpdateRequest;
 import com.sparta.spartadelivery.menu.presentation.dto.response.MenuDetailResponse;
 import com.sparta.spartadelivery.menu.presentation.dto.response.MenuListResponse;
+import com.sparta.spartadelivery.menu.presentation.dto.response.MenuUpdateResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -127,22 +128,22 @@ public class MenuController {
     }
 
     @Operation(
-            summary = "메뉴 숨김 API",
-            description = """
-                    메뉴를 숨김 처리합니다.
-                    - CUSTOMER: 수정 불가
-                    - OWNER: 본인 가게 메뉴만 숨김 가능
-                    - MANAGER/MASTER: 모든 메뉴 숨김 가능
-                    """
+            summary = "메뉴 수정",
+            description = "메뉴의 기본 정보, 카테고리, 상태(숨김), AI 관련 정보를 수정합니다.\n\n" +
+                    "**[권한 및 제약 사항]**\n" +
+                    "* **Owner**: 본인 가게의 메뉴만 수정 가능 (삭제된 메뉴는 수정 불가)\n" +
+                    "* **Manager**: 부적절한 정보 수정 및 숨김(Hidden) 처리 가능. 단, **aiPrompt 수정은 불가**\n" +
+                    "* **Master**: 모든 필드 수정 및 상태 변경 가능\n" +
+                    "* **Admin Lock**: 관리자가 잠금(`hiddenLockedByAdmin`)한 메뉴는 Owner가 숨김 해제 불가"
     )
-    @PatchMapping("/menus/{menuId}/hide")
-    @CheckMenuPermission(action = MenuAction.HIDE) // AOP 가동
-    public ResponseEntity<ApiResponse<MenuDetailResponse>> hideMenu(
-            @PathVariable UUID menuId,
-            @AuthenticationPrincipal UserPrincipal userPrincipal
-    ) {
-        MenuDetailResponse response = menuService.hideMenu(menuId, userPrincipal);
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.success(HttpStatus.OK.value(), "메뉴가 성공적으로 숨겨졌습니다.", response));
+    @PutMapping("/menus/{menuId}")
+    @PreAuthorize("hasAnyRole('OWNER', 'MANAGER', 'MASTER')")
+    public MenuUpdateResponse update(@PathVariable UUID menuId,
+                                     @RequestBody MenuUpdateRequest request,
+                                     @AuthenticationPrincipal UserPrincipal updateBy) {
+        return menuService.update(menuId, updateBy, request);
     }
+
+
+
 }
