@@ -2,7 +2,6 @@ package com.sparta.spartadelivery.order.domain.entity;
 
 import com.sparta.spartadelivery.global.exception.AppException;
 import com.sparta.spartadelivery.order.exception.OrderErrorCode;
-import org.springframework.web.bind.annotation.DeleteMapping;
 
 public enum OrderStatus {
     PENDING,    // 주문 접수 대기

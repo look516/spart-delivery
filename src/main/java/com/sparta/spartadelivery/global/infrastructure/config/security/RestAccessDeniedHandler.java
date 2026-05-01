@@ -3,10 +3,11 @@ package com.sparta.spartadelivery.global.infrastructure.config.security;
 import com.sparta.spartadelivery.global.exception.GlobalErrorCode;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Component;
+
+import java.io.IOException;
 
 // 인증은 되었지만 필요한 권한이 부족할 때 실행되는 Security 예외 핸들러
 // 로그인 자체는 성공했지만 관리자 API처럼 더 높은 권한이 필요한 요청을 보낸 경우,

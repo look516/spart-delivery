@@ -2,8 +2,9 @@ package com.sparta.spartadelivery.area.presentation.dto.response;
 
 import com.sparta.spartadelivery.area.domain.entity.Area;
 import io.swagger.v3.oas.annotations.media.Schema;
-import java.util.List;
 import org.springframework.data.domain.Page;
+
+import java.util.List;
 
 public record AreaPageResponse(
         @Schema(description = "운영 지역 목록")

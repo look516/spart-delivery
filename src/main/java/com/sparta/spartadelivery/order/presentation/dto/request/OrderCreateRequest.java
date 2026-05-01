@@ -1,9 +1,6 @@
 package com.sparta.spartadelivery.order.presentation.dto.request;
 
-import com.sparta.spartadelivery.address.domain.entity.Address;
-import com.sparta.spartadelivery.order.domain.entity.Order;
 import com.sparta.spartadelivery.order.domain.entity.OrderType;
-import com.sparta.spartadelivery.user.domain.entity.UserEntity;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 

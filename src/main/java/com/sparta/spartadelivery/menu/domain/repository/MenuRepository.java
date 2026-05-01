@@ -1,8 +1,6 @@
 package com.sparta.spartadelivery.menu.domain.repository;
 
 import com.sparta.spartadelivery.menu.domain.entity.Menu;
-import com.sparta.spartadelivery.menu.presentation.dto.response.MenuDetailResponse;
-import com.sparta.spartadelivery.menu.presentation.dto.response.MenuListResponse;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

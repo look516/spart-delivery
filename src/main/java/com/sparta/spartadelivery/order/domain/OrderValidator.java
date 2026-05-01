@@ -4,7 +4,6 @@ import com.sparta.spartadelivery.address.domain.repository.AddressRepository;
 import com.sparta.spartadelivery.address.exception.AddressErrorCode;
 import com.sparta.spartadelivery.auth.exception.AuthErrorCode;
 import com.sparta.spartadelivery.global.exception.AppException;
-import com.sparta.spartadelivery.global.exception.BaseErrorCode;
 import com.sparta.spartadelivery.menu.domain.entity.Menu;
 import com.sparta.spartadelivery.menu.domain.repository.MenuRepository;
 import com.sparta.spartadelivery.order.domain.entity.Order;
@@ -17,11 +16,13 @@ import com.sparta.spartadelivery.store.domain.repository.StoreRepository;
 import com.sparta.spartadelivery.user.domain.entity.Role;
 import com.sparta.spartadelivery.user.domain.entity.UserEntity;
 import com.sparta.spartadelivery.user.domain.repository.UserRepository;
-import com.sparta.spartadelivery.user.exception.UserErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Component

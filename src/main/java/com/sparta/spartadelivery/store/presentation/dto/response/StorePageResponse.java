@@ -2,8 +2,9 @@ package com.sparta.spartadelivery.store.presentation.dto.response;
 
 import com.sparta.spartadelivery.store.domain.entity.Store;
 import io.swagger.v3.oas.annotations.media.Schema;
-import java.util.List;
 import org.springframework.data.domain.Page;
+
+import java.util.List;
 
 public record StorePageResponse(
         @Schema(description = "가게 목록")

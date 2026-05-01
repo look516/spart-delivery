@@ -2,8 +2,9 @@ package com.sparta.spartadelivery.user.presentation.dto.response;
 
 import com.sparta.spartadelivery.user.domain.entity.UserEntity;
 import io.swagger.v3.oas.annotations.media.Schema;
-import java.util.List;
 import org.springframework.data.domain.Page;
+
+import java.util.List;
 
 public record ResUserPageDto(
         @Schema(description = "사용자 목록")

@@ -1,8 +1,8 @@
 package com.sparta.spartadelivery.global.presentation.advice;
 
 import com.sparta.spartadelivery.global.exception.AppException;
-import com.sparta.spartadelivery.global.exception.GlobalErrorCode;
 import com.sparta.spartadelivery.global.exception.BaseErrorCode;
+import com.sparta.spartadelivery.global.exception.GlobalErrorCode;
 import com.sparta.spartadelivery.global.presentation.dto.ApiResponse;
 import com.sparta.spartadelivery.global.presentation.dto.ValidationErrorResponse;
 import org.springframework.http.HttpStatus;

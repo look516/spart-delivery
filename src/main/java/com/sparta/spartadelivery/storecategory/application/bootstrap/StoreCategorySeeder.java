@@ -3,12 +3,13 @@ package com.sparta.spartadelivery.storecategory.application.bootstrap;
 import com.sparta.spartadelivery.storecategory.application.config.StoreCategorySeedProperties;
 import com.sparta.spartadelivery.storecategory.domain.entity.StoreCategory;
 import com.sparta.spartadelivery.storecategory.domain.repository.StoreCategoryRepository;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor

@@ -1,10 +1,7 @@
 package com.sparta.spartadelivery.order.domain.repository;
 
-import com.querydsl.core.types.Expression;
-import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.sparta.spartadelivery.order.domain.entity.OrderStatus;
@@ -24,7 +21,6 @@ import java.util.UUID;
 
 import static com.sparta.spartadelivery.order.domain.entity.QOrder.order;
 import static com.sparta.spartadelivery.order.domain.entity.QOrderItem.orderItem;
-import static com.sparta.spartadelivery.store.domain.entity.QStore.store;
 
 
 @Repository

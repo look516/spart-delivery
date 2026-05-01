@@ -10,14 +10,15 @@ import com.sparta.spartadelivery.storecategory.presentation.dto.request.StoreCat
 import com.sparta.spartadelivery.storecategory.presentation.dto.response.StoreCategoryDetailResponse;
 import com.sparta.spartadelivery.storecategory.presentation.dto.response.StoreCategoryPageResponse;
 import com.sparta.spartadelivery.user.domain.entity.Role;
-import java.util.Set;
-import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Set;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor

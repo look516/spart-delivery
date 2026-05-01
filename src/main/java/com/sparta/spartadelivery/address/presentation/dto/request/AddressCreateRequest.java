@@ -3,7 +3,6 @@ package com.sparta.spartadelivery.address.presentation.dto.request;
 import com.sparta.spartadelivery.address.domain.entity.Address;
 import com.sparta.spartadelivery.user.domain.entity.UserEntity;
 import jakarta.validation.constraints.NotBlank;
-import org.springframework.validation.beanvalidation.SpringValidatorAdapter;
 
 public record AddressCreateRequest(
 

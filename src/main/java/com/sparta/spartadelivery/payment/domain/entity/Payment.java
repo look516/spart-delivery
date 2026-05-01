@@ -1,8 +1,14 @@
 package com.sparta.spartadelivery.payment.domain.entity;
 
 import com.sparta.spartadelivery.global.entity.BaseEntity;
-import com.sparta.spartadelivery.order.domain.entity.Order;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

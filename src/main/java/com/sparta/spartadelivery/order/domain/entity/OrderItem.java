@@ -1,9 +1,14 @@
 package com.sparta.spartadelivery.order.domain.entity;
 
 import com.sparta.spartadelivery.global.exception.AppException;
-import com.sparta.spartadelivery.order.domain.entity.Order;
 import com.sparta.spartadelivery.order.exception.OrderErrorCode;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;

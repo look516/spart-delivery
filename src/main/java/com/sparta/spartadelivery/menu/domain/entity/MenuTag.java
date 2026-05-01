@@ -2,7 +2,13 @@ package com.sparta.spartadelivery.menu.domain.entity;
 
 import com.sparta.spartadelivery.global.entity.BaseEntity;
 import com.sparta.spartadelivery.menu.domain.vo.MenuTagVO;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Embedded;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
