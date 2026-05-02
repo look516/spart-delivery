@@ -149,7 +149,7 @@ class MenuServiceTest {
 
         // 2. DTO 생성 (record 생성자 이용)
         MenuUpdateRequest request = new MenuUpdateRequest(
-                "수정메뉴", 15000, "설명", "url", false, UUID.randomUUID(), "AI설명", "AI프롬프트"
+                "수정메뉴", 15000, "설명", "url", UUID.randomUUID(), "AI설명", "AI프롬프트"
         );
 
         // 3. 도메인 객체 Mocking
@@ -173,7 +173,7 @@ class MenuServiceTest {
                 .isEqualTo(MenuErrorCode.MENU_UPDATE_ACCESS_DENIED);
 
         // 검증: 예외가 발생했으므로 엔티티의 update 메서드는 절대 호출되지 않아야 함
-        verify(menu, never()).update(any(), any(), any(), any(), any(), anyBoolean(), any(), any());
+        verify(menu, never()).update(any(), any(), any(), any(), any(), any(), any());
     }
 
     @ParameterizedTest
@@ -188,14 +188,12 @@ class MenuServiceTest {
         UserPrincipal editor = principal(1L, role);
 
         MenuUpdateRequest request = new MenuUpdateRequest(
-                "수정된 메뉴", 25000, "설명", "url", false,
-                categoryId, "AI설명", "AI프롬프트"
+                "수정된 메뉴", 25000, "설명", "url", categoryId, "AI설명", "AI프롬프트"
         );
 
         Menu menu = new Menu(
-                storeId, categoryId,
-                "기존이름", 20000, "설명", "url",
-                false, "AI", "Prompt"
+                storeId, categoryId, "기존이름", 20000, "설명", "url",
+                 "AI", "Prompt"
         );
         ReflectionTestUtils.setField(menu, "id", menuId);
 
@@ -234,7 +232,6 @@ class MenuServiceTest {
                 20000,
                 "바삭함",
                 null,
-                false,
                 null,
                 null
         );

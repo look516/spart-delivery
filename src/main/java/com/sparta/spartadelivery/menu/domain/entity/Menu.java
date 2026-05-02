@@ -4,8 +4,13 @@ import com.sparta.spartadelivery.global.entity.BaseEntity;
 import com.sparta.spartadelivery.global.exception.AppException;
 import com.sparta.spartadelivery.menu.domain.vo.MoneyVO;
 import com.sparta.spartadelivery.menu.exception.MenuErrorCode;
+import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -53,6 +58,7 @@ public class Menu extends BaseEntity {
     @Column(columnDefinition = "TEXT")
     private String aiPrompt;
 
+    // 생성자 or builder
     public Menu(
             UUID storeId,
             UUID menuCategoryId,
@@ -60,7 +66,7 @@ public class Menu extends BaseEntity {
             Integer price,
             String description,
             String menuPictureUrl,
-            boolean isHidden, // 추후 제거
+            //boolean isHidden, // 추후 제거
             String aiDescription,
             String aiPrompt) {
 
@@ -70,7 +76,7 @@ public class Menu extends BaseEntity {
         this.price = new MoneyVO(price);
         this.description = description;
         this.menuPictureUrl = menuPictureUrl;
-        this.isHidden = isHidden; // 추후 isHidden -> false
+        this.isHidden = false; // 추후 isHidden -> false
         this.aiDescription = aiDescription;
         this.aiPrompt = aiPrompt;
     }
@@ -83,7 +89,7 @@ public class Menu extends BaseEntity {
             Integer price,
             String description,
             String menuPictureUrl,
-            boolean isHidden, // 추후 제거
+            //boolean isHidden, // 추후 제거
             String aiDescription,
             String aiPrompt) {
 
@@ -93,7 +99,7 @@ public class Menu extends BaseEntity {
         this.price = new MoneyVO(price);
         this.description = description;
         this.menuPictureUrl = menuPictureUrl;
-        this.isHidden = isHidden; // 추후 제거
+        //this.isHidden = isHidden; // 추후 제거
         this.aiDescription = aiDescription;
         this.aiPrompt = aiPrompt;
     }

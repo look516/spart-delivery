@@ -17,8 +17,8 @@ public record MenuUpdateRequest(
         @Schema(description = "메뉴 이미지 URL")
         String menuPictureUrl,
 
-        @Schema(description = "숨김 여부")
-        boolean isHidden,
+        //@Schema(description = "숨김 여부")
+        //boolean isHidden,
 
         @Schema(description = "메뉴 카테고리 ID")
         UUID menuCategoryId,

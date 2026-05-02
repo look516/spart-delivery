@@ -34,8 +34,8 @@ public record MenuCreateRequest(
         @Schema(description = "메뉴 사진", example = "http://image.com")
         String menuPictureUrl,
 
-        @Schema(description = "숨김 여부", example = "false")
-        boolean isHidden,
+        //@Schema(description = "숨김 여부", example = "false")
+        //boolean isHidden,
 
         @Schema(description = "AI 메뉴 설명", example = "달콤한 불고기 양념 소고기 패티와 신선한 야채가 어우러진 한국식 햄버거입니다.")
         String aiDescription,

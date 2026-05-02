@@ -1,13 +1,22 @@
 package com.sparta.spartadelivery.menu.domain;
 
-import com.sparta.spartadelivery.menu.domain.entity.*;
-import com.sparta.spartadelivery.menu.domain.repository.*;
+import com.sparta.spartadelivery.menu.domain.entity.Menu;
+import com.sparta.spartadelivery.menu.domain.entity.MenuCategory;
+import com.sparta.spartadelivery.menu.domain.entity.MenuTag;
+import com.sparta.spartadelivery.menu.domain.entity.OptionGroupSpec;
+import com.sparta.spartadelivery.menu.domain.entity.OptionSpec;
+import com.sparta.spartadelivery.menu.domain.entity.Tag;
+import com.sparta.spartadelivery.menu.domain.repository.MenuCategoryRepository;
+import com.sparta.spartadelivery.menu.domain.repository.MenuRepository;
+import com.sparta.spartadelivery.menu.domain.repository.MenuTagRepository;
+import com.sparta.spartadelivery.menu.domain.repository.OptionGroupSpecRepository;
+import com.sparta.spartadelivery.menu.domain.repository.OptionSpecRepository;
+import com.sparta.spartadelivery.menu.domain.repository.TagRepository;
 import com.sparta.spartadelivery.menu.domain.vo.MenuTagVO;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
 
 import java.util.UUID;
 
@@ -85,7 +94,6 @@ class MenuEntityIntegrationTest {
                 price,
                 description,
                 menuPictureUrl,
-                isHidden,
                 aiDescription,
                 aiPrompt
         );
@@ -118,7 +126,6 @@ class MenuEntityIntegrationTest {
                 18000,
                 "맛있는 치킨",
                 "http://image.com",
-                false,
                 "AI 설명",
                 "AI 프롬프트"
         );

@@ -114,7 +114,6 @@ class MenuHideE2ETest {
                     10000,
                     "설명111",
                     null,
-                    false,
                     null,
                     null)
         );
@@ -128,7 +127,6 @@ class MenuHideE2ETest {
                 20000,
                 "설명222",
                 null,
-                false,
                 null,
                 null)
         );

@@ -166,7 +166,6 @@ public class MenuService {
                 req.price(),
                 req.description(),
                 req.menuPictureUrl(),
-                req.isHidden(),
                 req.aiDescription(),
                 req.aiPrompt()
         );
@@ -213,7 +212,6 @@ public class MenuService {
                 priceVO.getPrice(),
                 request.description(),
                 request.menuPictureUrl(),
-                request.isHidden(),
                 request.aiDescription(),
                 request.aiPrompt()
         );
